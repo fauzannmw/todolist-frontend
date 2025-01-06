@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
 
-
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -16,10 +15,13 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const res = await axios.post(`${process.env.BASE_URL}/login`, {
-        username,
-        password,
-      });
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
+        {
+          username,
+          password,
+        }
+      );
 
       if (res.status === 200) {
         sessionStorage.setItem("authToken", res.data.data.token);

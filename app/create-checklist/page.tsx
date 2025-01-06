@@ -23,7 +23,7 @@ export default function CreateChecklistPage() {
       }
 
       const res = await axios.post(
-        `${process.env.BASE_URL}/checklist`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/checklist`,
         { name: todolistName },
         {
           headers: {

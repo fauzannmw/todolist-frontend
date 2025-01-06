@@ -14,11 +14,14 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`${process.env.BASE_URL}/register`, {
-        email,
-        username,
-        password,
-      });
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/register`,
+        {
+          email,
+          username,
+          password,
+        }
+      );
 
       console.log(res.status);
 
