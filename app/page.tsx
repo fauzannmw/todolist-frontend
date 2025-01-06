@@ -11,6 +11,8 @@ export default function Home() {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const BASE_URL = "http://94.74.86.174:8080/api";
+
   useEffect(() => {
     fetchChecklists();
   }, []);
@@ -26,7 +28,7 @@ export default function Home() {
       }
 
       const res = await axios.get<{ data: { id: number; name: string }[] }>(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/checklist`,
+        `${BASE_URL}/checklist`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -50,14 +52,11 @@ export default function Home() {
     }
 
     try {
-      await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/checklist/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.delete(`${BASE_URL}/checklist/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       alert("Todo List deleted successfully!");
       setChecklists(checklists.filter((checklist) => checklist.id !== id));
     } catch (error) {

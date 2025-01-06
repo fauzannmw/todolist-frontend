@@ -10,6 +10,8 @@ export default function CreateChecklistPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
+  const BASE_URL = "http://94.74.86.174:8080/api";
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -23,7 +25,7 @@ export default function CreateChecklistPage() {
       }
 
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/checklist`,
+        `${BASE_URL}/checklist`,
         { name: todolistName },
         {
           headers: {
