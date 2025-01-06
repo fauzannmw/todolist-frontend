@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -10,17 +11,18 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const BASE_URL = "http://94.74.86.174:8080/api";
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const res = await axios.post(`${BASE_URL}/login`, {
-        username,
-        password,
-      });
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
+        {
+          username,
+          password,
+        }
+      );
 
       if (res.status === 200) {
         sessionStorage.setItem("authToken", res.data.data.token);

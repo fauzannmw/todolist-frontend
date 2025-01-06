@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -10,17 +11,18 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const BASE_URL = "http://94.74.86.174:8080/api";
-
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`${BASE_URL}/register`, {
-        email,
-        username,
-        password,
-      });
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/register`,
+        {
+          email,
+          username,
+          password,
+        }
+      );
 
       console.log(res.status);
 
