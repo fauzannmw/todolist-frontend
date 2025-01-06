@@ -1,23 +1,18 @@
-// @/app/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import PrivateRoute from "./components/PrivateRoute";
+import Link from "next/link"; // Import Link from Next/Link
 
 const BASE_URL = "http://94.74.86.174:8080/api";
 
 export default function Home() {
-  const [checklists, setChecklists] = useState<{ id: string; name: string }[]>(
+  const [checklists, setChecklists] = useState<{ id: number; name: string }[]>(
     []
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedChecklist, setSelectedChecklist] = useState<{
-    id: string;
-    name: string;
-  } | null>(null);
-  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -35,7 +30,7 @@ export default function Home() {
         );
       }
 
-      const res = await axios.get<{ data: { id: string; name: string }[] }>(
+      const res = await axios.get<{ data: { id: number; name: string }[] }>(
         `${BASE_URL}/checklist`,
         {
           headers: {
@@ -52,7 +47,7 @@ export default function Home() {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     const token = sessionStorage.getItem("authToken");
     if (!token) {
       alert("Authentication token is missing. Please log in again.");
@@ -71,16 +66,6 @@ export default function Home() {
       console.error("Failed to delete checklist:", error);
       alert("Failed to delete Todo List. Please try again.");
     }
-  };
-
-  const handleShowDetails = (checklist: { id: string; name: string }) => {
-    setSelectedChecklist(checklist);
-    setIsPopupOpen(true);
-  };
-
-  const handleClosePopup = () => {
-    setIsPopupOpen(false);
-    setSelectedChecklist(null);
   };
 
   return (
@@ -106,12 +91,12 @@ export default function Home() {
               >
                 <span className="font-medium">{checklist.name}</span>
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => handleShowDetails(checklist)}
+                  <Link
+                    href={`/checklist/${checklist.id}`}
                     className="px-4 py-2 bg-blue-500 text-white rounded-md"
                   >
                     Details
-                  </button>
+                  </Link>
                   <button
                     onClick={() => handleDelete(checklist.id)}
                     className="px-4 py-2 bg-red-500 text-white rounded-md"
@@ -124,21 +109,6 @@ export default function Home() {
           </div>
         )}
       </main>
-
-      {isPopupOpen && selectedChecklist && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-md shadow-lg w-full max-w-lg">
-            <h2 className="text-xl font-bold mb-4">{selectedChecklist.name}</h2>
-            <p className="text-gray-600">Todo List details will appear here.</p>
-            <button
-              onClick={handleClosePopup}
-              className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-md"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
     </PrivateRoute>
   );
 }
