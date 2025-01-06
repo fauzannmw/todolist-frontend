@@ -11,7 +11,7 @@ export default function ChecklistDetailPage() {
   const params = useParams<{ checklistId: string }>();
   const checklistId = params?.checklistId;
   const [checklistItems, setChecklistItems] = useState<
-    { id: string; name: string; status: boolean }[]
+    { id: string; name: string; itemCompletionStatus: boolean }[]
   >([]);
   const [newItemName, setNewItemName] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -30,7 +30,7 @@ export default function ChecklistDetailPage() {
       if (!token) throw new Error("Missing authentication token.");
 
       const res = await axios.get<{
-        data: { id: string; name: string; status: boolean }[];
+        data: { id: string; name: string; itemCompletionStatus: boolean }[];
       }>(`${BASE_URL}/checklist/${checklistId}/item`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -75,7 +75,9 @@ export default function ChecklistDetailPage() {
       );
       setChecklistItems((prev) =>
         prev.map((item) =>
-          item.id === itemId ? { ...item, status: !currentStatus } : item
+          item.id === itemId
+            ? { ...item, itemCompletionStatus: !currentStatus }
+            : item
         )
       );
     } catch (error) {
@@ -142,8 +144,10 @@ export default function ChecklistDetailPage() {
               >
                 <input
                   type="checkbox"
-                  checked={item.status}
-                  onChange={() => handleUpdateStatus(item.id, item.status)}
+                  checked={item.itemCompletionStatus}
+                  onChange={() =>
+                    handleUpdateStatus(item.id, item.itemCompletionStatus)
+                  }
                 />
                 <input
                   type="text"
