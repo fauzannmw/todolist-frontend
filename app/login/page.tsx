@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
 
-const BASE_URL = "http://94.74.86.174:8080/api";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -17,7 +16,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const res = await axios.post(`${BASE_URL}/login`, {
+      const res = await axios.post(`${process.env.BASE_URL}/login`, {
         username,
         password,
       });

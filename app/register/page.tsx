@@ -4,8 +4,6 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
 
-const BASE_URL = "http://94.74.86.174:8080/api";
-
 export default function Register() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -16,7 +14,7 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`${BASE_URL}/register`, {
+      const res = await axios.post(`${process.env.BASE_URL}/register`, {
         email,
         username,
         password,

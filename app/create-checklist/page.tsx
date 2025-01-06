@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import PrivateRoute from "../components/PrivateRoute";
 
-const BASE_URL = "http://94.74.86.174:8080/api";
-
 export default function CreateChecklistPage() {
   const [todolistName, setTodolistName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +23,7 @@ export default function CreateChecklistPage() {
       }
 
       const res = await axios.post(
-        `${BASE_URL}/checklist`,
+        `${process.env.BASE_URL}/checklist`,
         { name: todolistName },
         {
           headers: {

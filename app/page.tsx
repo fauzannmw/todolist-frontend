@@ -1,20 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import PrivateRoute from "./components/PrivateRoute";
-import Link from "next/link"; // Import Link from Next/Link
-
-const BASE_URL = "http://94.74.86.174:8080/api";
+import Link from "next/link";
 
 export default function Home() {
   const [checklists, setChecklists] = useState<{ id: number; name: string }[]>(
     []
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const router = useRouter();
 
   useEffect(() => {
     fetchChecklists();
@@ -31,7 +26,7 @@ export default function Home() {
       }
 
       const res = await axios.get<{ data: { id: number; name: string }[] }>(
-        `${BASE_URL}/checklist`,
+        `${process.env.BASE_URL}/checklist`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -55,7 +50,7 @@ export default function Home() {
     }
 
     try {
-      await axios.delete(`${BASE_URL}/checklist/${id}`, {
+      await axios.delete(`${process.env.BASE_URL}/checklist/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -73,12 +68,12 @@ export default function Home() {
       <main className="h-full w-full flex flex-col items-center my-12 px-4 lg:px-0">
         <div className="w-full max-w-4xl flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-white">Your Todo Lists</h1>
-          <button
-            onClick={() => router.push("/create-checklist")}
+          <Link
+            href={`/create-checklist`}
             className="px-4 py-2 bg-green-500 text-white rounded-md"
           >
             + Create Checklist
-          </button>
+          </Link>
         </div>
         {isLoading ? (
           <p>Loading...</p>

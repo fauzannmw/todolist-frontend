@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import PrivateRoute from "@/app/components/PrivateRoute";
+import Link from "next/link";
 
-const BASE_URL = "http://94.74.86.174:8080/api";
 
 export default function ChecklistDetailPage() {
   const params = useParams<{ checklistId: string }>();
@@ -31,7 +31,7 @@ export default function ChecklistDetailPage() {
 
       const res = await axios.get<{
         data: { id: string; name: string; itemCompletionStatus: boolean }[];
-      }>(`${BASE_URL}/checklist/${checklistId}/item`, {
+      }>(`${process.env.BASE_URL}/checklist/${checklistId}/item`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setChecklistItems(res.data.data);
@@ -51,7 +51,7 @@ export default function ChecklistDetailPage() {
       if (!token) throw new Error("Missing authentication token.");
 
       const res = await axios.post(
-        `${BASE_URL}/checklist/${checklistId}/item`,
+        `${process.env.BASE_URL}/checklist/${checklistId}/item`,
         { itemName: newItemName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -69,7 +69,7 @@ export default function ChecklistDetailPage() {
       if (!token) throw new Error("Missing authentication token.");
 
       await axios.put(
-        `${BASE_URL}/checklist/${checklistId}/item/${itemId}`,
+        `${process.env.BASE_URL}/checklist/${checklistId}/item/${itemId}`,
         null,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -92,7 +92,7 @@ export default function ChecklistDetailPage() {
       if (!token) throw new Error("Missing authentication token.");
 
       await axios.delete(
-        `${BASE_URL}/checklist/${checklistId}/item/${itemId}`,
+        `${process.env.BASE_URL}/checklist/${checklistId}/item/${itemId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -112,7 +112,7 @@ export default function ChecklistDetailPage() {
       if (!token) throw new Error("Missing authentication token.");
 
       await axios.put(
-        `${BASE_URL}/checklist/${checklistId}/item/${itemId}`,
+        `${process.env.BASE_URL}/checklist/${checklistId}/item/${itemId}`,
         { itemName: newName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -133,6 +133,15 @@ export default function ChecklistDetailPage() {
         <h1 className="text-2xl font-bold mb-6 text-white">
           Checklist Details
         </h1>
+        <div className="w-full max-w-4xl flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-white">Your Todo Lists</h1>
+          <Link
+            href={`/`}
+            className="px-4 py-2 bg-green-500 text-white rounded-md"
+          >
+            Back to Home
+          </Link>
+        </div>
         <div className="w-full max-w-4xl flex flex-col gap-4">
           {isLoading ? (
             <p>Loading...</p>
